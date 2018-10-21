@@ -20,7 +20,7 @@ api = praw.Reddit(client_id=client_id,
 
 threads = File('threads.txt')
 submissions = []
-for s in api.redditor('izdwuut').submissions.new():
+for s in api.redditor(username).submissions.new():
     if s.subreddit == 'GiftofGames':
         if '[Offer]'.lower() in s.title.lower():
             if s.over_18 and not threads.contains(s.fullname):
