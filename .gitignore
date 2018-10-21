@@ -114,5 +114,5 @@ dmypy.json
 .idea
 
 # Project-specific
-threads.txt
 comments.txt
+threads.txt
