@@ -6,7 +6,7 @@ from configparser import ConfigParser
 config = ConfigParser()
 config.read('settings.ini')
 
-api_key = config['reddit']['api_key']
+client_secret = config['reddit']['client_secret']
 client_id = config['reddit']['client_id']
 username = config['reddit']['username']
 password = config['reddit']['password']
@@ -14,7 +14,7 @@ user_agent = config['reddit']['user_agent']
 
 api = praw.Reddit(client_id=client_id,
                   client_secret=client_secret,
-                  user_agent=client_secret,
+                  user_agent=user_agent,
                   username=username,
                   password=password)
 
