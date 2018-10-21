@@ -1,8 +1,9 @@
-import praw
 import time
-from configparser import ConfigParser
-from tqdm import tqdm
 import os
+from configparser import ConfigParser
+
+import praw
+from tqdm import tqdm
 
 from _file import File
 
