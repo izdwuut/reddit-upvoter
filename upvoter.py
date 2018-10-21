@@ -29,6 +29,8 @@ for s in api.redditor(username).submissions.new():
                 print('Processing: ' + s.title)
                 submissions.append(s)
                 for c in tqdm(s.comments):
+                    if not c.author:
+                        continue
                     c.upvote()
                     time.sleep(2)
                 threads.add_line(s.fullname)
