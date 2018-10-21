@@ -33,4 +33,5 @@ for s in api.redditor(username).submissions.new():
                     time.sleep(2)
                 threads.add_line(s.fullname)
                 time.sleep(2)
+                print()
 threads.close()
