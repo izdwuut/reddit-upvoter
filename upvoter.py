@@ -2,8 +2,9 @@ import praw
 import time
 from _file import File
 from configparser import ConfigParser
+import os
 
-config = ConfigParser()
+config = ConfigParser(os.environ)
 config.read('settings.ini')
 
 client_secret = config['reddit']['client_secret']
