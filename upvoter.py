@@ -1,55 +1,42 @@
-import time
 import os
 from configparser import ConfigParser
-
-import praw
+from praw import Reddit
 from tqdm import tqdm
 
-from _file import File
-
-
 class Upvoter:
-    def _get_api(self):
-        config = self.config['reddit']
-        client_secret = config['client_secret']
-        client_id = config['client_id']
-        username = config['username']
-        password = config['password']
-        user_agent = config['user_agent']
+    _api = None
 
-        api = praw.Reddit(client_id=client_id,
-                          client_secret=client_secret,
-                          user_agent=user_agent,
-                          username=username,
-                          password=password)
+    @property
+    def api(self):
+        if not self._api:
+            config = self.config['reddit']
+            client_secret = config['client_secret']
+            client_id = config['client_id']
+            username = config['username']
+            password = config['password']
+            user_agent = config['user_agent']
 
-        return api
+            self._api = Reddit(client_id=client_id,
+                                    client_secret=client_secret,
+                                    user_agent=user_agent,
+                                    username=username,
+                                    password=password)
+
+        return self._api
 
     def upvote(self):
-        threads = File(self.config['general']['threads'])
-        username = self.config['reddit']['username']
-        for s in self.api.redditor(username).submissions.new():
-            if s.subreddit == 'GiftofGames':
-                if '[Offer]'.lower() in s.title.lower():
-                    if s.over_18 and not threads.contains(s.fullname):
-                        print('Processing: ' + s.title)
-                        for c in tqdm(s.comments):
-                            if not c.author:
-                                continue
-                            c.upvote()
-                            time.sleep(2)
-                        threads.add_line(s.fullname)
-                        time.sleep(2)
-                        print()
-        threads.close()
+        for submission in self.api.subreddit(self.config['reddit']['subreddit']).stream.submissions():
+            print('Processing thread {}.'.format(submission.title))
+            submission.upvote()
+            for comment in tqdm(submission.comments):
+                comment.upvote()
+            print()
 
-    def __init__(self, settings):
+    def __init__(self, settings='settings.ini'):
         self.config = ConfigParser(os.environ)
         self.config.read(settings)
-        self.api = self._get_api()
 
 
 if __name__ == '__main__':
-    settings = 'settings.ini'
-    upvoter = Upvoter(settings)
+    upvoter = Upvoter()
     upvoter.upvote()
