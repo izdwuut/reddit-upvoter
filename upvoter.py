@@ -9,18 +9,11 @@ class Upvoter:
     @property
     def api(self):
         if not self._api:
-            config = self.config['reddit']
-            client_secret = config['client_secret']
-            client_id = config['client_id']
-            username = config['username']
-            password = config['password']
-            user_agent = config['user_agent']
-
-            self._api = Reddit(client_id=client_id,
-                                    client_secret=client_secret,
-                                    user_agent=user_agent,
-                                    username=username,
-                                    password=password)
+            self._api = Reddit(client_id=self.config['reddit']['client_id'],
+                               client_secret=self.config['reddit']['client_secret'],
+                               user_agent=self.config['reddit']['user_agent'],
+                               username=self.config['reddit']['username'],
+                               password=self.config['reddit']['password'])
 
         return self._api
 
