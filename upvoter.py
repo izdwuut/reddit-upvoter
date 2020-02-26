@@ -1,16 +1,14 @@
 import os
 from configparser import ConfigParser
 from praw import Reddit
-from tqdm import tqdm
 
 class Upvoter:
     def upvote(self):
-        for submission in self.api.subreddit(self.config['reddit']['subreddit']).stream.submissions():
-            print('Processing thread {}.'.format(submission.title))
+        for comment in self.api.subreddit(self.config['reddit']['subreddit']).stream.comments():
+            submission = comment.submission
             submission.upvote()
-            for comment in tqdm(submission.comments):
-                comment.upvote()
-            print()
+            comment.upvote()
+            print('Processed comment {} in thread {}.'.format(comment.id, submission.url))
 
     def __init__(self, settings='settings.ini'):
         self.config = ConfigParser(os.environ)
